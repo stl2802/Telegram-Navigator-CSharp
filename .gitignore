@@ -1,0 +1,143 @@
+# ========== C# (.NET) ==========
+bin/
+obj/
+*.class
+*.dll
+*.exe
+*.ilk
+*.lib
+*.lua
+*.ncb
+*.o
+*.obj
+*.pdb
+*.prj
+*.pyc
+*.res
+*.so
+*.suo
+*.user
+*.aps
+*.mbr
+*.prt
+Debug/
+Release/
+Build/
+BuildTools/
+.metadata/
+*.idb
+*.exp
+*.map
+*.ilk
+# NuGet
+*.gem
+*.gemspec
+/nuget.exe
+/nuget/
+.nuget/
+*.nuget/
+# Gradle (for .NET projects that use it)
+.gradle/
+build/
+# Maven (for .NET projects that use it)
+target/
+*.jar
+*.war
+*.nar
+*.zip
+# Dependencies
+vendor/
+bundle/
+dependencies/
+
+# ========== Avalonia UI ==========
+# Avalonia-specific cache and build artifacts
+*.avldb
+*.avln#
+# Avalonia resource processing
+
+# ========== CLI Application ==========
+# CLI specific artifacts
+*.log
+logs/
+*.out
+# CLI test outputs
+test-results/
+*.trx
+
+# ========== VS Code ==========
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+*.code-workspace
+# ========== Visual Studio Community (IDE) ==========
+# VS settings folder (project-wide IDE settings)
+.vs/
+# IntelliSense cache
+*.ipch
+# Visual Studio database files
+*.VC.db
+*.VC.opendb
+# Temporary project files
+*.sdf
+*.vcxproj.user
+*.vcxproj.user.*
+*.vcxproj.filters
+*.vcxproj.*.local
+*.vcxproj.*.user
+*.vcxproj.*.user.*
+# Visual Studio CodeMap / Project Index
+*.vsvb
+*.vpw
+*.vsp
+*.vspf
+*.CodeIndex
+*.CodeIndexBuilder
+*.CodeMap
+*.CodeMapBuilder
+# Visual Studio Community specific
+*.devinit
+*.devinit.*
+
+# ========== General ==========
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+*.temp
+*.lock
+# Environment
+.env
+.env.*
+!.env.example
+# IDE / Editor
+.idea/
+*.iml
+*.sublime-workspace
+*.sublime-project
+*.sublime-build
+*.project
+*.classpath
+.settings/
+# Coverage
+coverage/
+.coverage
+*.gcov
+*.gcda
+*.gcno
+# Temporary
+tmp/
+temp/
+*.old
+*.orig
+
+
+#my
+md/
