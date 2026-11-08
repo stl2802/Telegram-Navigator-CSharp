@@ -1,0 +1,187 @@
+{
+  "name": "Тестовая группа",
+  "type": "private_group",
+  "id": 12345,
+  "messages": [
+    {
+      "id": 1,
+      "type": "message",
+      "date": "2024-06-01T10:30:00",
+      "date_unixtime": "1717235400",
+      "from": "Алиса",
+      "text": "Привет всем!"
+    },
+    {
+      "id": 2,
+      "type": "message",
+      "date": "2024-06-01T11:00:00",
+      "from": "Боб",
+      "text_entities": [
+        { "type": "plain", "text": "Смотри ссылку: " },
+        { "type": "text_link", "text": "GitHub", "href": "https://github.com" },
+        { "type": "plain", "text": " и ещё " },
+        { "type": "link", "text": "https://example.com" }
+      ],
+      "text": "Смотри ссылку: GitHub и ещё https://example.com"
+    },
+    {
+      "id": 3,
+      "type": "message",
+      "date": "2024-06-01T11:05:00",
+      "from": "Алиса",
+      "text": [
+        "Привет, ",
+        { "type": "mention", "text": "@Боб" },
+        "!"
+      ],
+      "reply_to_message_id": 1
+    },
+    {
+      "id": 4,
+      "type": "message",
+      "date": "2024-06-02T09:15:00",
+      "from": "Чарли",
+      "text_entities": [
+        { "type": "plain", "text": "Вот фото из поездки" }
+      ],
+      "photo": "photos/2024-06/photo_1.jpg",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "id": 5,
+      "type": "message",
+      "date": "2024-06-02T09:20:00",
+      "from": "Чарли",
+      "text": "",
+      "file": "video/2024-06/video_1.mp4",
+      "media_type": "video_file",
+      "mime_type": "video/mp4",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "id": 6,
+      "type": "message",
+      "date": "2024-06-02T10:00:00",
+      "from": "Боб",
+      "text_entities": [
+        { "type": "plain", "text": "Голосовое сообщение" }
+      ],
+      "file": "voice/voice_1.ogg",
+      "media_type": "voice_message",
+      "mime_type": "audio/ogg"
+    },
+    {
+      "id": 7,
+      "type": "message",
+      "date": "2024-06-02T10:05:00",
+      "from": "Алиса",
+      "text": "Файл не выгружен",
+      "file": "(File not included. Change data exporting settings to download.)",
+      "media_type": "video_file",
+      "mime_type": "video/mp4"
+    },
+    {
+      "id": 8,
+      "type": "service",
+      "date": "2024-06-02T10:30:00",
+      "actor": "Чарли",
+      "action": "pin",
+      "text": "Чарли закрепил сообщение"
+    },
+    {
+      "id": 9,
+      "type": "message",
+      "date": "2024-06-03T14:00:00",
+      "from": null,
+      "text": "Сообщение от удалённого аккаунта"
+    },
+    {
+      "id": 10,
+      "type": "service",
+      "date": "2024-06-03T14:05:00",
+      "actor": "Боб",
+      "action": "add_user",
+      "text": "Боб добавил Ден"
+    },
+    {
+      "id": 11,
+      "type": "message",
+      "date": "2024-06-03T15:30:00",
+      "from": "Алиса",
+      "text": "Стикер!"
+    },
+    {
+      "id": 12,
+      "type": "message",
+      "date": "2024-06-03T15:35:00",
+      "from": "Алиса",
+      "text": "",
+      "file": "stickers/sticker_1.webp",
+      "media_type": "sticker",
+      "mime_type": "image/webp"
+    },
+    {
+      "id": 13,
+      "type": "message",
+      "date": "2024-06-04T20:00:00",
+      "from": "Боб",
+      "text": "Кружок!",
+      "file": "video_message/vm_1.mp4",
+      "media_type": "video_message",
+      "mime_type": "video/mp4",
+      "width": 360,
+      "height": 360
+    },
+    {
+      "id": 14,
+      "type": "message",
+      "date": "2024-06-04T20:30:00",
+      "from": "Боб",
+      "text": "Обычный текстовый ответ",
+      "reply_to_message_id": 11
+    },
+    {
+      "id": 15,
+      "type": "message",
+      "date": "2024-06-04T21:00:00",
+      "from": "Чарли",
+      "text": "Анимация!",
+      "file": "animation/gif_1.mp4",
+      "media_type": "animation",
+      "mime_type": "video/mp4"
+    },
+    {
+      "id": 16,
+      "type": "message",
+      "date": "2024-06-04T21:05:00",
+      "from": "Чарли",
+      "text": "",
+      "file": "audio/audio_1.mp3",
+      "media_type": "audio_file",
+      "mime_type": "audio/mpeg"
+    },
+    {
+      "id": 17,
+      "type": "message",
+      "date": "2024-06-04T21:10:00",
+      "from": "Чарли",
+      "text": "Документ без media_type",
+      "file": "documents/doc_1.pdf"
+    },
+    {
+      "id": 18,
+      "type": "message",
+      "date": "2024-06-01T12:00:00",
+      "from": "Алиса",
+      "text_entities": [
+        { "type": "plain", "text": "Ещё один пост с ссылкой" }
+      ],
+      "text": "Ещё один пост с ссылкой",
+      "photo": "photos/2024-06/photo_2.jpg",
+      "width": 800,
+      "height": 600
+    }
+  ]
+}
