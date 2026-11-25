@@ -4,9 +4,11 @@ using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TelegramNavigator.Core.Analytics;
+using TelegramNavigator.Core.Export;
 using TelegramNavigator.Core.Models;
 using TelegramNavigator.Core.Parsing;
 using TelegramNavigator.Core.Services;
+using TelegramNavigator.Core.Settings;
 using TelegramNavigator.Desktop.Services;
 
 namespace TelegramNavigator.Desktop.ViewModels;
@@ -20,22 +22,40 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly IChatAnalyzer _analyzer;
     private readonly ChatSession _session;
     private readonly IDialogService _dialogs;
+    private readonly IChatExporter _exporter;
+    private readonly ISettingsService _settings;
 
     public MainWindowViewModel(
         IChatParser parser,
         IChatAnalyzer analyzer,
         ChatSession session,
-        IDialogService dialogs)
+        IDialogService dialogs,
+        IChatExporter exporter,
+        ISettingsService settings)
     {
         _parser = parser;
         _analyzer = analyzer;
         _session = session;
         _dialogs = dialogs;
+        _exporter = exporter;
+        _settings = settings;
 
         _session.ChatLoaded += OnChatLoaded;
         _session.FilterChanged += OnFilterChanged;
 
         Authors.Add("Все");
+    }
+
+    /// <summary>
+    /// Событие: запрос фокуса на поле поиска (Ctrl+F).
+    /// ViewModel не должна знать про UI, поэтому code-behind подписывается и ставит фокус.
+    /// </summary>
+    public event Action? FocusSearchRequested;
+
+    [RelayCommand]
+    private void FocusSearch()
+    {
+        FocusSearchRequested?.Invoke();
     }
 
     // ===== Коллекции =====
@@ -139,6 +159,128 @@ public partial class MainWindowViewModel : ViewModelBase
         foreach (var item in Messages)
             item.IsSelectedForExport = true;
     }
+
+    [RelayCommand]
+    private async Task ExportPdfAsync()
+    {
+        if (_session.CurrentChat is null)
+        {
+            await _dialogs.ShowErrorAsync("Экспорт PDF", "Сначала откройте чат.");
+            return;
+        }
+
+        // Определяем, какие сообщения экспортировать
+        var selected = Messages.Where(m => m.IsSelectedForExport).Select(m => m.Message).ToList();
+        var toExport = selected.Count > 0 ? selected : _session.FilteredMessages.ToList();
+
+        if (toExport.Count == 0)
+        {
+            await _dialogs.ShowErrorAsync("Экспорт PDF", "Нет сообщений для экспорта.");
+            return;
+        }
+
+        var suggestedName = $"{SanitizeFileName(_session.CurrentChat.Name)}.pdf";
+        var path = await _dialogs.PickPdfSavePathAsync(suggestedName);
+        if (path is null) return;
+
+        IsBusy = true;
+        StatusText = "Экспорт в PDF...";
+
+        try
+        {
+            await _exporter.ExportAsync(_session.CurrentChat.Name, toExport, path);
+            StatusText = $"PDF сохранён: {path}";
+        }
+        catch (Exception ex)
+        {
+            await _dialogs.ShowErrorAsync("Ошибка экспорта", ex.Message);
+            StatusText = "Ошибка экспорта PDF";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    /// <summary>
+    /// Удаляет из имени файла недопустимые символы.
+    /// </summary>
+    private static string SanitizeFileName(string name)
+    {
+        var invalid = Path.GetInvalidFileNameChars();
+        return string.Concat(name.Select(ch => invalid.Contains(ch) ? '_' : ch));
+    }
+
+    // ===== Настройки =====
+
+    /// <summary>
+    /// Создаёт объект настроек из текущего состояния ViewModel.
+    /// </summary>
+    public AppSettings CreateSettings()
+    {
+        var recentFiles = new List<string>();
+
+        // Сохраняем текущий LastPath первым
+        if (_session.CurrentChat is not null && !string.IsNullOrEmpty(LastPath))
+        {
+            recentFiles.Add(LastPath);
+            // Добавляем остальные недавние файлы
+            foreach (var f in RecentFiles)
+            {
+                if (f != LastPath)
+                    recentFiles.Add(f);
+            }
+        }
+        else
+        {
+            recentFiles.AddRange(RecentFiles);
+        }
+
+        return new AppSettings(
+            Theme: IsDarkTheme ? "Dark" : "Light",
+            LastPath: LastPath,
+            SearchText: SearchText,
+            Author: SelectedAuthor is "Все" ? null : SelectedAuthor,
+            OnlyWithMedia: OnlyWithMedia,
+            OnlyWithLinks: OnlyWithLinks,
+            RecentFiles: recentFiles.Take(5).ToList().AsReadOnly());
+    }
+
+    /// <summary>
+    /// Применяет загруженные настройки к ViewModel.
+    /// </summary>
+    public void ApplySettings(AppSettings settings)
+    {
+        // Тема
+        IsDarkTheme = settings.Theme == "Dark";
+        Application.Current!.RequestedThemeVariant =
+            IsDarkTheme ? ThemeVariant.Dark : ThemeVariant.Light;
+
+        // Фильтры
+        SearchText = settings.SearchText;
+        SelectedAuthor = settings.Author;
+        OnlyWithMedia = settings.OnlyWithMedia;
+        OnlyWithLinks = settings.OnlyWithLinks;
+
+        // Недавние файлы
+        RecentFiles.Clear();
+        foreach (var f in settings.RecentFiles)
+            RecentFiles.Add(f);
+
+        LastPath = settings.LastPath;
+    }
+
+    // ===== Recent files =====
+
+    /// <summary>
+    /// Текущий LastPath для настройки.
+    /// </summary>
+    private string? LastPath { get; set; }
+
+    /// <summary>
+    /// Список недавно открытых файлов.
+    /// </summary>
+    public ObservableCollection<string> RecentFiles { get; } = new();
 
     // ===== Обработчики событий =====
 

@@ -12,9 +12,16 @@
     <KeyBinding Gesture="Escape" Command="{Binding CloseCommand}" />
   </Window.KeyBindings>
   <ScrollViewer Margin="10">
-    <TextBlock Text="{Binding HelpText}"
-               TextWrapping="Wrap"
-               FontFamily="Consolas, monospace"
-               LineHeight="20" />
+    <StackPanel Spacing="10">
+      <TextBlock Text="{Binding HotkeysHelp}"
+                 TextWrapping="Wrap"
+                 FontFamily="Consolas, monospace"
+                 LineHeight="20" />
+      <Rectangle Height="1" Fill="{StaticResource SystemAccentColor}" Opacity="0.3" />
+      <TextBlock Text="{Binding CliHelp}"
+                 TextWrapping="Wrap"
+                 FontFamily="Consolas, monospace"
+                 LineHeight="20" />
+    </StackPanel>
   </ScrollViewer>
 </Window>

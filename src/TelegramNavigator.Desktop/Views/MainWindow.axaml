@@ -3,10 +3,14 @@
 		xmlns:vm="using:TelegramNavigator.Desktop.ViewModels"
 		x:Class="TelegramNavigator.Desktop.Views.MainWindow"
 		x:DataType="vm:MainWindowViewModel"
-		Title="Telegram Navigator" Width="1000" Height="700">
+		Title="Telegram Navigator"
+		Icon="/Assets/app.ico"
+		Width="1000" Height="700">
   <Window.KeyBindings>
 	<KeyBinding Gesture="F1" Command="{Binding ShowHelpCommand}" />
 	<KeyBinding Gesture="Ctrl+O" Command="{Binding OpenFileCommand}" />
+	<KeyBinding Gesture="Ctrl+F" Command="{Binding FocusSearchCommand}" />
+	<KeyBinding Gesture="Ctrl+E" Command="{Binding ExportPdfCommand}" />
 	<KeyBinding Gesture="Ctrl+T" Command="{Binding ToggleThemeCommand}" />
 	<KeyBinding Gesture="Ctrl+A" Command="{Binding SelectAllForExportCommand}" />
 	<KeyBinding Gesture="Escape" Command="{Binding ClearFiltersCommand}" />
@@ -26,7 +30,7 @@
 	<ScrollViewer Grid.Row="1" Grid.Column="0" Margin="5">
 	  <StackPanel Spacing="8" Margin="10">
 		<TextBlock Text="ФИЛЬТРЫ" FontWeight="Bold" Margin="0 0 0 5" />
-		<TextBox Text="{Binding SearchText}" PlaceholderText="Поиск" />
+		<TextBox Name="SearchBox" Text="{Binding SearchText}" PlaceholderText="Поиск" />
 		<TextBlock Text="Автор" />
 		<ComboBox ItemsSource="{Binding Authors}" SelectedItem="{Binding SelectedAuthor}" HorizontalAlignment="Stretch" />
 		<TextBlock Text="От" />
