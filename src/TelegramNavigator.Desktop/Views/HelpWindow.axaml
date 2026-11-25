@@ -1,0 +1,20 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:TelegramNavigator.Desktop.ViewModels"
+        x:Class="TelegramNavigator.Desktop.Views.HelpWindow"
+        x:DataType="vm:HelpViewModel"
+        Title="Справка"
+        Width="500"
+        Height="400"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False">
+  <Window.KeyBindings>
+    <KeyBinding Gesture="Escape" Command="{Binding CloseCommand}" />
+  </Window.KeyBindings>
+  <ScrollViewer Margin="10">
+    <TextBlock Text="{Binding HelpText}"
+               TextWrapping="Wrap"
+               FontFamily="Consolas, monospace"
+               LineHeight="20" />
+  </ScrollViewer>
+</Window>

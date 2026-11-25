@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/TelegramNavigator.Core/TelegramNavigator.Core.csproj" />
+    <Project Path="src/TelegramNavigator.Desktop/TelegramNavigator.Desktop.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/TelegramNavigator.Core.Tests/TelegramNavigator.Core.Tests.csproj" />
