@@ -38,3 +38,10 @@ public record ChatSummary(
     int LinkCount,
     DateTime? First,
     DateTime? Last);
+/// <summary>
+/// Ребро графа ответов: кто и сколько раз ответил кому.
+/// </summary>
+/// <param name="From">Кто ответил.</param>
+/// <param name="To">Кому ответили.</param>
+/// <param name="Count">Сколько раз.</param>
+public record ReplyEdge(string From, string To, int Count);

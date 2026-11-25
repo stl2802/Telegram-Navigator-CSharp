@@ -89,9 +89,14 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private bool _isDarkTheme;
 
     /// <summary>
-    /// Аналитика — лениво создаётся при первом обращении.
+    /// Аналитика.
     /// </summary>
     public AnalyticsViewModel Analytics { get; } = new();
+
+    /// <summary>
+    /// Граф связей (кто кому отвечает).
+    /// </summary>
+    public ReplyGraphViewModel ReplyGraph { get; } = new();
 
     // ===== Команды =====
 
@@ -325,6 +330,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
 
         Analytics.Update(chat.Messages, _analyzer);
+        ReplyGraph.Update(chat.Messages, _analyzer);
     }
 
     private void ApplyCurrentFilter()

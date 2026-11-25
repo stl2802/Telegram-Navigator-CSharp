@@ -147,4 +147,72 @@ public class ChatAnalyzerTests
         Assert.Null(summary.First);
         Assert.Null(summary.Last);
     }
+
+    [Fact]
+    public void GetReplyPairs_ShouldReturnCorrectEdges()
+    {
+        var d1 = new DateTime(2024, 6, 1, 10, 0, 0);
+        var d2 = new DateTime(2024, 6, 1, 11, 0, 0);
+
+        var messages = new List<ChatMessage>
+        {
+            new TextMessage(1, d1, "Alice", "A1", NoLinks, null),
+            new TextMessage(2, d1, "Bob", "B1", NoLinks, 1),     // Bob → Alice
+            new TextMessage(3, d2, "Alice", "A2", NoLinks, 2),   // Alice → Bob
+            new TextMessage(4, d2, "Bob", "B2", NoLinks, 1),     // Bob → Alice (ещё раз)
+        };
+        var pairs = _analyzer.GetReplyPairs(messages, 10);
+
+        Assert.Equal(2, pairs.Count);
+        Assert.Contains(pairs, p => p.From == "Bob" && p.To == "Alice" && p.Count == 2);
+        Assert.Contains(pairs, p => p.From == "Alice" && p.To == "Bob" && p.Count == 1);
+    }
+
+    [Fact]
+    public void GetReplyPairs_EmptyList_ShouldReturnEmpty()
+    {
+        var pairs = _analyzer.GetReplyPairs(Array.Empty<ChatMessage>(), 10);
+        Assert.Empty(pairs);
+    }
+
+    [Fact]
+    public void GetReplyPairs_ShouldIgnoreServiceMessages()
+    {
+        var d1 = new DateTime(2024, 6, 1, 10, 0, 0);
+        var messages = new List<ChatMessage>
+        {
+            new TextMessage(1, d1, "Alice", "A1", NoLinks, null),
+            new ServiceMessage(2, d1, "System", "Action", NoLinks, null, "pin"),
+        };
+        var pairs = _analyzer.GetReplyPairs(messages, 10);
+        Assert.Empty(pairs);
+    }
+
+    [Fact]
+    public void GetReplyPairs_ShouldExcludeSelfReplies()
+    {
+        var d1 = new DateTime(2024, 6, 1, 10, 0, 0);
+        var messages = new List<ChatMessage>
+        {
+            new TextMessage(1, d1, "Alice", "A1", NoLinks, null),
+            new TextMessage(2, d1, "Alice", "A2", NoLinks, 1), // Alice → Alice — исключается
+        };
+        var pairs = _analyzer.GetReplyPairs(messages, 10);
+        Assert.Empty(pairs);
+    }
+
+    [Fact]
+    public void GetReplyPairs_TopLimit_ShouldRestrictCount()
+    {
+        var d1 = new DateTime(2024, 6, 1, 10, 0, 0);
+        var messages = new List<ChatMessage>
+        {
+            new TextMessage(1, d1, "Alice", "A1", NoLinks, null),
+            new TextMessage(2, d1, "Bob", "B1", NoLinks, 1),
+            new TextMessage(3, d1, "Charlie", "C1", NoLinks, 1),
+            new TextMessage(4, d1, "David", "D1", NoLinks, 1),
+        };
+        var pairs = _analyzer.GetReplyPairs(messages, 2);
+        Assert.Equal(2, pairs.Count);
+    }
 }

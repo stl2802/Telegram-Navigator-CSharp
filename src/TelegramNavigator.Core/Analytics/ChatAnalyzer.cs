@@ -86,4 +86,29 @@ public class ChatAnalyzer : IChatAnalyzer
             first,
             last);
     }
+
+    /// <summary>
+    /// Возвращает топ пар «кто → кому ответил».
+    /// </summary>
+    public IReadOnlyList<ReplyEdge> GetReplyPairs(IReadOnlyList<ChatMessage> messages, int topCount)
+    {
+        // Словарь: Id сообщения → автор (только непустые авторы)
+        var idToAuthor = messages
+            .Where(m => !string.IsNullOrEmpty(m.Author))
+            .ToDictionary(m => m.Id, m => m.Author);
+
+        // Собираем пары: (кто ответил, кому ответили)
+        var pairs = messages
+            .Where(m => m is not ServiceMessage)
+            .Where(m => m.ReplyToId.HasValue && idToAuthor.ContainsKey(m.ReplyToId.Value))
+            .Select(m => (From: m.Author, To: idToAuthor[m.ReplyToId!.Value]))
+            .Where(x => x.From != x.To)
+            .GroupBy(x => (x.From, x.To))
+            .Select(g => new ReplyEdge(g.Key.From, g.Key.To, g.Count()))
+            .OrderByDescending(e => e.Count)
+            .Take(topCount)
+            .ToList();
+
+        return pairs;
+    }
 }

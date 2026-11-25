@@ -49,6 +49,15 @@ public class MessageFilterTests
         Assert.False(filter.Matches(TextMsg));
     }
 
+[Theory]
+    [InlineData("hello")]
+    [InlineData("HELLO")]
+    [InlineData("Hello")]
+    public void SearchText_Theory_ShouldMatchCaseInsensitive(string search)
+    {
+        var filter = new MessageFilter(search, null, null, null, false, false);
+        Assert.True(filter.Matches(TextMsg));
+    }
     [Fact]
     public void SearchText_ShouldReturnFalseForEmptyText()
     {

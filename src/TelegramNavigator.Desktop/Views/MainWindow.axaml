@@ -152,6 +152,20 @@
 		  </StackPanel>
 		</ScrollViewer>
 	  </TabItem>
+	  <TabItem Header="Связи">
+		<ListBox ItemsSource="{Binding ReplyGraph.Edges}">
+		  <ListBox.ItemTemplate>
+			<DataTemplate x:DataType="vm:ReplyEdgeViewModel">
+			  <StackPanel Orientation="Horizontal" Spacing="5" Margin="4">
+				<TextBlock Text="{Binding From}" FontWeight="Bold" Width="100" />
+				<TextBlock Text="→" />
+				<TextBlock Text="{Binding To}" FontWeight="Bold" Width="100" />
+				<TextBlock Text="{Binding Count}" FontWeight="Bold" />
+			  </StackPanel>
+			</DataTemplate>
+		  </ListBox.ItemTemplate>
+		</ListBox>
+	  </TabItem>
 	</TabControl>
   </Grid>
 </Window>

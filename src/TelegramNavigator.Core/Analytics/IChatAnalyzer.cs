@@ -26,4 +26,8 @@ public interface IChatAnalyzer
     /// Общая сводка по чату.
     /// </summary>
     ChatSummary GetSummary(IEnumerable<ChatMessage> messages);
+/// <summary>
+    /// Возвращает топ пар «кто → кому ответил», отсортированный по убыванию Count.
+    /// </summary>
+    IReadOnlyList<ReplyEdge> GetReplyPairs(IReadOnlyList<ChatMessage> messages, int topCount);
 }
